@@ -16,11 +16,11 @@ import matplotlib.pyplot as plt
 K, N = (int(item) for item in input('Press values K and N: ').split())
 mid = N//2
 
-# Generating matrix A with random integers from -10 to 10
+# Генерация матрицы A со случайными целыми числами от -10 до 10
 A = np.random.randint (-10, 10, (N, N))
 print(f'Матрица A:\n{A}')
 
-# Counting the number of zeros in odd columns and the product of numbers in even columns starting from the middle row
+# Подсчет количества нулей в нечетных столбцах и произведения чисел в четных столбцах, начиная со средней строки
 c1 = 0
 c2 = 1
 for i in range(mid, N):
@@ -34,7 +34,7 @@ for i in range(mid, N):
 print(f'\nВ Е количество нулей в нечетных столбцах = {c1}')
 print(  f'В Е в нечетных столбцах произведение чисел  = {c2}')
 
-# Creating matrix F based on matrix A
+# Создание матрицы F на основе матрицы A
 F = A.copy()
 for i in range(mid):
     if c1 > c2:
@@ -45,7 +45,7 @@ for i in range(mid):
             F[i][j], F[mid+i][j] = F[mid+i][j], F[i][j]
 print(f'\nМатрица F:\n{F}')
 
-# Calculating determinant of matrix A and sum of diagonal elements of matrix F
+# Вычисление определителя матрицы A и суммы диагональных элементов матрицы F
 determinant = 0
 for j in range(N):
     determinant += (-1)**j * A[0][j] * np.linalg.det(np.delete(np.delete(A, 0, axis=0), j, axis=1)) if N > 1 else A[0][0]
@@ -82,7 +82,7 @@ else:
     print(f'\nРезультат A+G-Ft :\n{res_1}')
     print(f'\nРезультат (A+G-Ft)*K :\n{res_2}')
 
-# Plotting matrix F in 3 different forms
+# Построение матрицы F в 3-х различных формах
 fig = plt.figure()
 
 ax_1 = fig.add_subplot(1, 3, 1, projection='3d')
