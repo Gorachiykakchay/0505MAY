@@ -11,67 +11,78 @@ D	Е
 '''
 
 import numpy as np
-from math import prod
-from copy import deepcopy
-
 import matplotlib.pyplot as plt
 
-K, N = (int(item) for item in input('Press values K and N: ').split()) #Ввод начальных условий
-mid = N//2 # Для удобства расчитываем размерность подматриц
+K, N = (int(item) for item in input('Press values K and N: ').split())
+mid = N//2
 
-A = np.random.randint (-10, 10, (N, N)) #Генерируем матрицу A случайными числами в диапазоне [-10, 10]
+# Generating matrix A with random integers from -10 to 10
+A = np.random.randint (-10, 10, (N, N))
 print(f'Матрица A:\n{A}')
 
+# Counting the number of zeros in odd columns and the product of numbers in even columns starting from the middle row
 c1 = 0
 c2 = 1
-for row in A[mid:,mid::2]: #Вычисляем данные по условию - В Е количество чисел, больших К в четных столбцах
-    for item in row:
-        if item == 0: c1 += 1  
-    c2 *= prod(row)   #Вычисляем данные по условию - В Е в нечетных столбцах произведение чисел
+for i in range(mid, N):
+    for j in range(mid, N, 2):
+        item = A[i][j]
+        if item == 0:
+            c1 += 1
+        if j == mid:
+            continue
+        c2 *= item
 print(f'\nВ Е количество нулей в нечетных столбцах = {c1}')
 print(  f'В Е в нечетных столбцах произведение чисел  = {c2}')
 
-F = deepcopy(A) #создаем матрицу F на основе матрицы A
-for i in range(mid): #делаем проход по столбцам\строкам
-    if c1>c2: #меняем подматрицы B и C симметрично
-        F[:mid,i], F[:mid,-1-i] = deepcopy(F[:mid,-1-i]), deepcopy(F[:mid,i]) 
-    else: #меняем подматрицы C и E несимметрично
-        F[i, mid:], F[mid+i, mid:] = deepcopy(F[mid+i, mid:]), deepcopy(F[i, mid:])
+# Creating matrix F based on matrix A
+F = A.copy()
+for i in range(mid):
+    if c1 > c2:
+        for j in range(mid):
+            F[i][j], F[i][-1-j], F[-1-i][j], F[-1-i][-1-j] = F[-1-i][-1-j], F[-1-i][j], F[i][-1-j], F[i][j]
+    else:
+        for j in range(mid, N):
+            F[i][j], F[mid+i][j] = F[mid+i][j], F[i][j]
 print(f'\nМатрица F:\n{F}')
 
-determinant = np.linalg.det(A) #Вычисляем определитель матрицы A
-sum_diag = np.trace(F) #Вычисляем сумму диагональных элементов матрицы F
+# Calculating determinant of matrix A and sum of diagonal elements of matrix F
+determinant = 0
+for j in range(N):
+    determinant += (-1)**j * A[0][j] * np.linalg.det(np.delete(np.delete(A, 0, axis=0), j, axis=1)) if N > 1 else A[0][0]
+sum_diag = 0
+for i in range(N):
+    sum_diag += F[i][i]
+
 print(f'\nОпределитель матрицы A                 = {determinant:.2f}')
 print(  f'Сумма диагональных элементов матрицы F = {sum_diag}')
 
-np.set_printoptions(precision = 2, suppress=True) #Устанавливаем параметры для вывода матрицы на печать: 2 знака после запятой
+np.set_printoptions(precision = 2, suppress=True)
 
-if determinant > sum_diag: 
-    #A-1*AT – K * F-1
-    print(f'Вычисляем выражение: A-1*AT – K * F-1')
+if determinant > sum_diag:
     A_inv = np.linalg.inv(A)
+    A_t = A.T
+    F_inv = np.linalg.inv(F)
+    print(f'Вычисляем выражение: A-1*AT – K * F-1')
     print(f'\nРезультат A-1 :\n{A_inv}')
-    A_t = np.transpose(A)
     print(f'\nРезультат At :\n{A_t}')
     res_1 = np.dot(A_inv, A_t)
     print(f'\nРезультат A-1 * At :\n{res_1}')
-    F_inv = np.linalg.inv(F)
-    print(f'\nРезультат F-1 :\n{F_inv}')
-    print(f'\nРезультат K*F-1 :\n{K*F_inv}')
-    print(f'\nРезультат A-1*At - K*F-1 :\n{res_1 - K*F_inv}')
+    KF_inv = K * F_inv
+    print(f'\nРезультат K*F-1 :\n{KF_inv}')
+    res_2 = res_1 - KF_inv
+    print(f'\nРезультат A-1*At - K*F-1 :\n{res_2}')
 else:
-    #(A +G-FТ)*K
-    print(f'Вычисляем выражение: (A +GТ-F-1)*K')
     G = np.tril(A)
-    print(f'\nМатрица G:\n{G}')
-    F_t = np.transpose(F)
-    print(f'\nРезультат Ft :\n{F_t}')
+    F_t = F.T
     res_1 = A + G - F_t
+    print(f'Вычисляем выражение: (A +GТ-F-1)*K')
+    print(f'\nМатрица G:\n{G}')
+    print(f'\nРезультат Ft :\n{F_t}')
+    res_2 = res_1 * K
     print(f'\nРезультат A+G-Ft :\n{res_1}')
-    print(f'\nРезультат (A+G-Ft)*K :\n{res_1*K}')
+    print(f'\nРезультат (A+G-Ft)*K :\n{res_2}')
 
-#Для матрицы F выводим три графика
-
+# Plotting matrix F in 3 different forms
 fig = plt.figure()
 
 ax_1 = fig.add_subplot(1, 3, 1, projection='3d')
