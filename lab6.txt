@@ -1,0 +1,34 @@
+import itertools
+
+K = int(input("Введите количество разных фруктов: "))
+fruits = []
+for i in range(K):
+    fruit = input("Введите название фрукта: ")
+    fruits.append(fruit)
+
+N = int(input("Введите количество фруктов в полдниковом меню: "))
+
+menu = list(itertools.combinations(fruits, N))
+
+for m in menu:
+    print(", ".join(m))
+
+
+import itertools
+
+K = int(input("Введите количество разных фруктов: "))
+fruits = []
+for i in range(K):
+    fruit = input("Введите название фрукта: ")
+    fruits.append(fruit)
+
+N = int(input("Введите количество фруктов в полдниковом меню: "))
+
+max_repeat = int(input("Введите максимальное количество повторений одного и того же фрукта в меню: "))
+
+menu = []
+for i in range(1, max_repeat + 1):
+    menu += itertools.combinations_with_replacement(fruits, N - i)
+
+for m in menu:
+    print(", ".join(m))
