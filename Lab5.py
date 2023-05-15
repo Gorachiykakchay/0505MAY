@@ -1,4 +1,5 @@
-Исправленный код:
+#25 вариант
+
 
 import sys
 import time
@@ -52,7 +53,7 @@ num_list = []
 
 for i in range(1, n + 1, 1):
     num_list.append(i)
-    
+
     # Рекурсия
     start_time = time.time()
     recursive_result = recursive_f(i)
@@ -60,7 +61,7 @@ for i in range(1, n + 1, 1):
     print(str(i) + ') Рекурсия: ' + str(recursive_result))
     print('Время: ' + str(temp))
     recursion_time.append(temp)
-    
+
     # Итерация
     start_time = time.time()
     iterative_result = iterative_f(i)
