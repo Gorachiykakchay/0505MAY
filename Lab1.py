@@ -1,39 +1,35 @@
 #Написать программу, которая читая символы из бесконечной последовательности (эмулируется конечным файлом, читающимся поблочно), распознает, преобразует и выводит на экран числа по определенному правилу. Числа распознаются по законам грамматики русского языка. Преобразование делать по возможности через словарь. Для упрощения под выводом числа прописью подразумевается последовательный вывод всех цифр числа. Регулярные выражения использовать нельзя. 
 #Шестнадцатеричные четные числа, не превышающие 1024 начинающиеся с нечетных цифр. Четные цифры выводить словами.
+#Вариант 25.
+# Шеснадцатиричные четные числа, не превышающие 102410 начинающиеся с нечетных цифр.
+# Четные цифры выводить словами.
 
-buffer_len = 1
-work_buffer = ''
-c = {0: 'ноль', 1: 'один', 2: 'два', 3: 'три', 4: 'четыре', 5: 'пять', 6: 'шесть', 7: 'семь', 8: 'восемь', 9: 'девять', A: 'десять', B: 'одиннадцать', C: 'двенадцать', D: 'тринадцать', E: 'четырнадцать', D: 'пятнадцать'}
-k = False
-
-with open('nums.txt') as file:
-    a = file.read(buffer_len)
-    if not a:
-        print('\nФайл в директории проекта пустой')
-        exit()
-
-    while a:
-        # Чтение шестнадцатеричных цифр из файла
-        while a.isalpha() or a.isdigit():
-            if a.isalpha() and a.upper() in 'ABCDEF' or a.isdigit():
-                work_buffer += a
-            a = file.read(buffer_len)
-
-        # Если work_buffer не пустой и состоит только из шестнадцатеричных цифр
-        if len(work_buffer) > 0 and all(c in '0123456789ABCDEF' for c in work_buffer):
-            if int(work_buffer, 16) % 2 == 0 and int(work_buffer, 16) < 1024:
-                if int(work_buffer[0], 16) % 2 != 0:
-                    k = True
-                    for i in str(int(work_buffer)):
-                        if int(i, 16) % 2 == 0:
-                            print(c[int(i, 16)], end=' ')
-                        else:
-                            print(i, end=' ')
-                    print()
-
-        # Сброс буфера
-        work_buffer = ''
-        a = file.read(buffer_len)
-
-if not k:
-    print('В файле нет подходящих под условие чисел')
+buffer = ''
+chislo = ''
+maxim = '0'
+colich_1 = 0
+colich_2 = 0
+slovar = {0:'ноль',1:'1',2:'два',3:'3',4:'четыре',5:'5',6:'шесть',7:'7',8:'восемь',9:'9',\
+     'A':'десять','B':'11','C':'двенадцать','D':'13','E':'четырнадцать','F':'15'}
+with open("text.txt",'r') as f:
+    buffer = f.readline(1)
+    if not buffer:
+        print("Файл является пустым")
+        colich_2 +=1
+    while buffer:
+        while buffer in ['1','2','3','4','5','6','7','8','9','0','A','B','C','D','E','F']:
+            chislo += buffer
+            buffer = f.readline(1)
+        if len(chislo) > 0 and int(chislo,16) % 2==0 and int(chislo[0],16) % 2 != 0 and int(chislo[0],16) <=1024:
+            colich_1 += 1
+            print('Одно из чисел:', end=' ')
+            for j in range(len(chislo)):
+                for l in slovar:
+                    if str(l) == chislo[j]:
+                        print(slovar[l], end=' ')
+                        break
+            print('')
+        chislo = ''
+        buffer = f.read(1)
+if colich_1 == 0 and colich_2 == 0:
+        print("Чисел не найдено", end=" ")
