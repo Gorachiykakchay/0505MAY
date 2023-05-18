@@ -1,53 +1,71 @@
-# Объектно-ориентированная реализация
 
-class Nanny:
-    def __init__(self, fruits, menu_size, max_repeat):
-        self.fruits = fruits
-        self.menu_size = menu_size
-        self.max_repeat = max_repeat
+from random import choice, randint
+from itertools import permutations
+
+
+class MenuGenerator:
+    def __init__(self, k, n):
+        self.k = k
+        self.n = n
+        self.fruits = [f'Фрукт {i}' for i in range(1, k+1)]
+        self.days_of_week = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
     
     def generate_menu(self):
+        menu_combinations = list(permutations(self.fruits, self.n))
+        random_menu = [choice(menu_combinations) for i in range(len(self.days_of_week))]
         menu = []
-        def generate(menu, current_menu):
-            if len(current_menu) == self.menu_size:
-                menu.append(current_menu)
-            else:
-                for fruit in self.fruits:
-                    if current_menu.count(fruit) < self.max_repeat:
-                        generate(menu, current_menu + [fruit])
-        generate(menu, [])
+        for i, day in enumerate(self.days_of_week):
+            daily_menu = {}
+            for fruit in random_menu[i]:
+                calories = randint(1, 100)
+                daily_menu[fruit] = calories
+            max_calories_fruit = max(daily_menu, key=daily_menu.get)
+            daily_menu[f'Самый калорийный фрукт на день {day} ({max_calories_fruit}, {daily_menu[max_calories_fruit]})'] = ""
+            menu_item = f'{day}: {", ".join([f"{fruit} ({calories} ккал)" for fruit, calories in daily_menu.items()])})'
+            menu.append(menu_item)
         return menu
-        
-    def calculate_vitamins(self, menu):
-        vitamins = {}
-        for m in menu:
-            total_vitamins = sum(self.get_vitamins(fruit) for fruit in m)
-            vitamins[tuple(m)] = total_vitamins
-        return vitamins
-    
-    def get_vitamins(self, fruit):
-        # Здесь можно ограничить характеристики фруктов
-        vitamins = {
-            "яблоко": 10,
-            "апельсин": 12,
-            "груша": 8,
-            "банан": 15,
-            "киви": 9,
-            "виноград": 17,
-            "лимон": 14,
-            "авокадо": 25,
-            "ананас": 7,
-            "гранат": 21,
-            "персик": 8
-        }
-        return vitamins.get(fruit, 0)
-    
-    def get_best_menu(self):
-        menu = self.generate_menu()
-        vitamins = self.calculate_vitamins(menu)
-        sorted_vitamins = dict(sorted(vitamins.items(), key=lambda x:x[1], reverse=True))
-        return sorted_vitamins
 
+    def total_combinations(self):
+        menu_combinations = list(permutations(self.fruits, self.n))
+        return len(menu_combinations)
+
+
+print('Введите количество разных фруктов K: ', end='')
+k = int(input())
+if k <= 0:
+    print('Фрукты закончились')
+    quit()
+
+while True:
+    n = int(input('Введите количество фруктов в одном полднике N: '))
+    if n <= 0:
+      print('Некорректное количество фруктов')
+    elif n > k:
+        print(f"Недостаточно фруктов. Введите число фруктов не больше {k}")
+    else:
+        break
+
+print('\nПервая часть')
+
+menu_generator = MenuGenerator(k, n)
+random_menu = [choice(list(permutations(menu_generator.fruits, menu_generator.n))) for i in range(len(menu_generator.days_of_week))]
+menu = []
+for i, day in enumerate(menu_generator.days_of_week):
+    menu_item = f'{day}: {", ".join(random_menu[i])}'
+    menu.append(menu_item)
+
+for item in menu:
+    print(item)
+
+print(f"{menu_generator.total_combinations()} возможных комбинаций меню")
+
+print('\nВторая часть')
+
+menu = menu_generator.generate_menu()
+for item in menu:
+    print(item)
+
+print(f"{menu_generator.total_combinations()} возможных комбинаций меню")
 # Использование класса
 fruits = ["яблоко", "апельсин", "груша", "банан", "киви", "виноград", "лимон", "авокадо", "ананас", "гранат", "персик"]
 menu_size = 3
