@@ -4,8 +4,8 @@
 #Вариант 25. У няни неограниченное количество  фруктов К разных названий (ф1,…фК). Сформировать (вывести) все возможные варианты меню полдника (N фруктов) для ребенка на неделю.
 
 
-from itertools import product
-from random import randint
+from random import choice, randint
+from itertools import permutations
 
 print('Введите количество разных фруктов K: ', end='')
 k = int(input())
@@ -14,24 +14,35 @@ if k <= 0:
     quit()
 else:
     print('Введите количество фруктов в одном полднике N: ', end='')
-n = int(input())
+    n = int(input())
 
 print('\nПервая часть')
-fruits = []
-kol = 0
 
-for i in range(1, k + 1):
-    fruits.append(f'Фрукт {i}')
+fruits = [f'Фрукт {i}' for i in range(1, k+1)]
+days_of_week = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
 
-for i in product(fruits, repeat=n):
-    kol += 1
+menu_combinations = list(permutations(fruits, n))
+total_combinations = len(menu_combinations)
 
-print('Всего комбинаций:' + str(kol))
+random_menu = [choice(menu_combinations) for i in range(len(days_of_week))]
+
+menu = []
+for i, day in enumerate(days_of_week):
+    menu_item = f'{day}: {", ".join(random_menu[i])}'
+    menu.append(menu_item)
+
+for item in menu:
+    print(item)
+
+print(f"{total_combinations} возможных комбинаций меню")
+
 print('\nВторая часть')
 print('Введите количество дней: ', end='')
 days = int(input())
-# Создаем пустой словарь меню на каждый день
-weekly_menu = {day: {} for day in range(1, days + 1)}
+
+#Создаем пустой словарь меню на каждый день
+
+weekly_menu = {}
 
 for day in range(1, days + 1):
     print(f'Меню на день {day}:')
@@ -43,9 +54,15 @@ for day in range(1, days + 1):
         calories = randint(1, 100)  # генерируем случайное число для калорийности фрукта
         daily_menu[fruit] = calories
 
-    weekly_menu[day] = daily_menu
     max_calories_fruit = max(daily_menu, key=daily_menu.get)
-    weekly_menu[day][f'Самый калорийный фрукт на день {day}'] = daily_menu[max_calories_fruit]
-    print(daily_menu)
 
-print(f'Меню на неделю: {weekly_menu}\n')
+    daily_menu[f'Самый калорийный фрукт на день {day}'] = max_calories_fruit
+    weekly_menu[f'День {day}'] = daily_menu
+
+for day, menu in weekly_menu.items():
+    print(f'Меню на {day}:')
+    for fruit, calories in menu.items():
+        if 'Самый калорийный' not in fruit:
+            print(f'{fruit}: {calories} ккал')
+        else:
+            print(fruit + ': ' + menu[fruit])
