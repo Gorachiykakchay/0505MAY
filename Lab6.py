@@ -3,8 +3,6 @@
 #2 часть – усложнить написанную программу, введя по своему усмотрению в условие минимум одно ограничение на характеристики объектов и целевую функцию для оптимизации решения.
 #Вариант 25. У няни неограниченное количество  фруктов К разных названий (ф1,…фК). Сформировать (вывести) все возможные варианты меню полдника (N фруктов) для ребенка на неделю.
 
-
-
 from random import choice, randint
 from itertools import permutations
 
@@ -68,14 +66,3 @@ for item in menu:
 
 print(f"{total_combinations} возможных комбинаций меню")
 
-
-    daily_menu[f'Самый калорийный фрукт на день {day}'] = max_calories_fruit
-    weekly_menu[f'День {day}'] = daily_menu
-
-for day, menu in weekly_menu.items():
-    print(f'Меню на {day}:')
-    for fruit, calories in menu.items():
-        if 'Самый калорийный' not in fruit:
-            print(f'{fruit}: {calories} ккал')
-        else:
-            print(fruit + ': ' + menu[fruit])
