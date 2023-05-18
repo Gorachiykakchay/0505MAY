@@ -66,13 +66,3 @@ for item in menu:
     print(item)
 
 print(f"{menu_generator.total_combinations()} возможных комбинаций меню")
-# Использование класса
-fruits = ["яблоко", "апельсин", "груша", "банан", "киви", "виноград", "лимон", "авокадо", "ананас", "гранат", "персик"]
-menu_size = 3
-max_repeat = 2
-
-nanny = Nanny(fruits, menu_size, max_repeat)
-best_menu = nanny.get_best_menu()
-
-for m in best_menu:
-    print(", ".join(m), " | Витамины: ", best_menu[m])
