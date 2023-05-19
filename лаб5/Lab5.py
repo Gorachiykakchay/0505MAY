@@ -53,7 +53,7 @@ def iterative_f(number):
 recursion_time = []
 iteration_time = []
 num_list = []
-max_recursion_number = 30    # На больших числах рекурсия будет работать очень медленно
+max_recursion_number = 1000    # На больших числах рекурсия будет работать очень медленно
 
 for i in range(1, n + 1):
     num_list.append(i)
