@@ -5,7 +5,7 @@
 Вариант 25. У няни неограниченное количество  фруктов К разных названий (ф1,…фК). Сформировать (вывести) все возможные варианты меню полдника (N фруктов) для ребенка на неделю.
 '''
 import random
-from itertools import product
+from itertools import product, combinations
 from random import randint
 
 print('Введите количество разных фруктов K: ', end='')
@@ -26,7 +26,7 @@ while True:
 print('\nЧАСТЬ 1')
 print('--------------------')
 fruits = [f'ф{i}' for i in range(1, k + 1)]
-menu_options = list(product(fruits, repeat=n))
+menu_options = list(combinations(fruits, n))
 total_combinations = len(menu_options)
 print(f'Всего вариантов меню: {total_combinations}')
 print('Варианты меню:')
@@ -45,20 +45,17 @@ print('--------------------')
 
 for day in range(days):
     calories = {fruit: randint(50, 150) for fruit in fruits}
-    day_combinations = menu_options[:]
+    day_combinations = list(product(fruits, repeat=n))
     
-    for i, option in enumerate(day_combinations):
-        random_order = list(range(n))
-        random.shuffle(random_order)
-        option = [option[j] for j in random_order]
+    day_calories = []
+    for option in day_combinations:
         option_calories = sum(calories[fruit] for fruit in option)
-        day_combinations[i] = (option, option_calories)
-    
-    day_combinations = sorted(day_combinations, key=lambda x:x[1], reverse=True)
+        day_calories.append((option, option_calories))
+    day_calories.sort(key=lambda x: x[1], reverse=True)
     max_calories_fruit = max(calories.items(), key=lambda x: x[1])
     
     print(f"\nМеню на день {day + 1}:")
-    for option, option_calories in day_combinations:
+    for option, option_calories in day_calories:
         option = ' '.join(f"{fruit} ({calories[fruit]} ккал)" for fruit in option)
         print(f"{option} ({option_calories} ккал)")
     
