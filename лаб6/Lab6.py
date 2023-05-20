@@ -6,8 +6,6 @@
 '''
 
 import random
-from itertools import product,combinations 
-from random import randint
 
 print('Введите количество разных фруктов K: ', end='')
 k = int(input())
@@ -26,9 +24,16 @@ while True:
 
 print('\nЧАСТЬ 1')
 print('--------------------')
+
 fruits = [f'ф{i}' for i in range(1, k + 1)]
-menu_options = list(product(fruits, repeat=n))
-menu_options = [option for option in menu_options if len(set(option)) == n]
+menu_options = []
+for i in range(k ** n):
+    option = []
+    for j in range(n):
+        index = (i // k ** j) % k
+        option.append(fruits[index])
+    if len(set(option)) == n:
+        menu_options.append(option)
 total_combinations = len(menu_options)
 print(f'Всего вариантов меню: {total_combinations}')
 print('Варианты меню:')
@@ -41,26 +46,32 @@ while True:
         print('Некорректное количество дней')
     else:
         break
-        
+
 print('\nЧАСТЬ 2')
 print('--------------------')
-calories = {fruit: randint(50, 150) for fruit in fruits}
+
+calories = {fruit: random.randint(50, 150) for fruit in fruits}
 
 for day in range(days):
-    calories = {fruit: randint(50, 150) for fruit in fruits}
-    day_combinations = list(product(fruits, repeat=n))
-    
+    day_combinations = []
+    for i in range(k ** n):
+        option = []
+        for j in range(n):
+            index = (i // k ** j) % k
+            option.append(fruits[index])
+        if len(set(option)) == n:
+            day_combinations.append(option)
+
     day_calories = []
     for option in day_combinations:
-        if len(set(option)) == len(option):
-            option_calories = sum(calories[fruit] for fruit in option)
-            day_calories.append((option, option_calories))
+        option_calories = sum(calories[fruit] for fruit in option)
+        day_calories.append((option, option_calories))
     day_calories.sort(key=lambda x: x[1], reverse=True)
     max_calories_fruit = max(calories.items(), key=lambda x: x[1])
-    
+
     print(f"\nМеню на день {day + 1}:")
     for option, option_calories in day_calories:
         option = ' '.join(f"{fruit} ({calories[fruit]} ккал)" for fruit in option)
         print(f"{option} ({option_calories} ккал)")
-    
-    print(f"\nСамый калорийный фрукт на день {day + 1}: {max_calories_fruit[0]} ({max_calories_fruit[1]} ккал)") 
+
+    print(f"\nСамый калорийный фрукт на день {day + 1}: {max_calories_fruit[0]} ({max_calories_fruit[1]} ккал)")
