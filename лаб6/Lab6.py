@@ -50,21 +50,10 @@ while True:
 print('\nЧАСТЬ 2')
 print('--------------------')
 
-calories = {fruit: random.randint(50, 150) for fruit in fruits}
-
 for day in range(days):
     calories = {fruit: random.randint(50, 150) for fruit in fruits}
-    day_combinations = []
-    for i in range(k * n):
-        option = []
-        for j in range(n):
-            index = (i // k ** j) % k
-            option.append(fruits[index])
-        if len(set(option)) == n:
-            day_combinations.append(option)
-
     day_calories = []
-    for option in day_combinations:
+    for option in menu_options:
         option_calories = sum(calories[fruit] for fruit in option)
         day_calories.append((option, option_calories))
     day_calories.sort(key=lambda x: x[1], reverse=True)
