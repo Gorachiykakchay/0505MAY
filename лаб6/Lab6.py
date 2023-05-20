@@ -53,8 +53,9 @@ print('--------------------')
 calories = {fruit: random.randint(50, 150) for fruit in fruits}
 
 for day in range(days):
+    calories = {fruit: random.randint(50, 150) for fruit in fruits}
     day_combinations = []
-    for i in range(k ** n):
+    for i in range(k * n):
         option = []
         for j in range(n):
             index = (i // k ** j) % k
