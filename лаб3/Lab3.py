@@ -60,7 +60,7 @@ elif n % 4 == 0:
             if i >= j and j != n // 4 - 1 + n - i:
                 proiz *= F[i][j] * F[i][n // 4 + 1 - j]
 
-# Преобразование матрицы F в соответствии с заданием
+# Преобразование матрицы F
 if kol > proiz:
     for i in range(n // 2):
         for j in range(n // 2 + 1, n):
