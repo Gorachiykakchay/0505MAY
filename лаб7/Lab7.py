@@ -1,68 +1,67 @@
-
-from random import choice, randint
-from itertools import permutations
+import random
 
 
-class MenuGenerator:
-    def __init__(self, k, n):
-        self.k = k
-        self.n = n
-        self.fruits = [f'Фрукт {i}' for i in range(1, k+1)]
-        self.days_of_week = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
-    
-    def generate_menu(self):
-        menu_combinations = list(permutations(self.fruits, self.n))
-        random_menu = [choice(menu_combinations) for i in range(len(self.days_of_week))]
-        menu = []
-        for i, day in enumerate(self.days_of_week):
-            daily_menu = {}
-            for fruit in random_menu[i]:
-                calories = randint(1, 100)
-                daily_menu[fruit] = calories
-            max_calories_fruit = max(daily_menu, key=daily_menu.get)
-            daily_menu[f'Самый калорийный фрукт на день {day} ({max_calories_fruit}, {daily_menu[max_calories_fruit]})'] = ""
-            menu_item = f'{day}: {", ".join([f"{fruit} ({calories} ккал)" for fruit, calories in daily_menu.items()])})'
-            menu.append(menu_item)
-        return menu
+class FruitContainer:
+    def __init__(self, num_fruits, num_per_container, days):
+        self.num_fruits = num_fruits
+        self.num_per_container = num_per_container
+        self.days = days
+        self.fruits = [f'ф{i}' for i in range(1, num_fruits + 1)]
+        self.menu_options = []
+        self.generate_menu_options()
 
-    def total_combinations(self):
-        menu_combinations = list(permutations(self.fruits, self.n))
-        return len(menu_combinations)
+    def generate_menu_options(self):
+        for i in range(self.num_fruits ** self.num_per_container):
+            option = []
+            for j in range(self.num_per_container):
+                index = (i // self.num_fruits ** j) % self.num_fruits
+                option.append(self.fruits[index])
+            if len(set(option)) == self.num_per_container:
+                self.menu_options.append(option)
+
+    def print_menu_options(self):
+        total_combinations = len(self.menu_options)
+        print(f'Всего вариантов меню: {total_combinations}')
+        print('Варианты меню:')
+        for option in self.menu_options:
+            print(' '.join(option))
+
+    def simulate_days(self):
+        print('--------------------')
+        for day in range(self.days):
+            calories = {fruit: random.randint(50, 150) for fruit in self.fruits}
+            day_calories = []
+            for option in self.menu_options:
+                option_calories = sum(calories[fruit] for fruit in option)
+                day_calories.append((option, option_calories))
+            day_calories.sort(key=lambda x: x[1], reverse=True)
+            max_calories_fruit = max(calories.items(), key=lambda x: x[1])
+
+            print(f"\nМеню на день {day + 1}:")
+            for option, option_calories in day_calories:
+                option = ' '.join(f"{fruit} ({calories[fruit]} ккал)" for fruit in option)
+                print(f"{option} ({option_calories} ккал)")
+
+            print(f"\nСамый калорийный фрукт на день {day + 1}: {max_calories_fruit[0]} ({max_calories_fruit[1]} ккал)")
 
 
-print('Введите количество разных фруктов K: ', end='')
-k = int(input())
-if k <= 0:
-    print('Фрукты закончились')
-    quit()
+def main():
+    k = int(input('Введите количество разных фруктов K: '))
+    while True:
+        n = int(input('Введите количество фруктов в одном полднике N: '))
+        if n <= 0:
+            print('Некорректное количество фруктов')
+        elif n > k:
+            print(f"Недостаточно фруктов. Введите число фруктов не больше {k}")
+        else:
+            break
 
-while True:
-    n = int(input('Введите количество фруктов в одном полднике N: '))
-    if n <= 0:
-      print('Некорректное количество фруктов')
-    elif n > k:
-        print(f"Недостаточно фруктов. Введите число фруктов не больше {k}")
-    else:
-        break
+    days = int(input('Введите количество дней: '))
 
-print('\nПервая часть')
+    container = FruitContainer(k, n, days)
+    container.print_menu_options()
+    container.simulate_days()
 
-menu_generator = MenuGenerator(k, n)
-random_menu = [choice(list(permutations(menu_generator.fruits, menu_generator.n))) for i in range(len(menu_generator.days_of_week))]
-menu = []
-for i, day in enumerate(menu_generator.days_of_week):
-    menu_item = f'{day}: {", ".join(random_menu[i])}'
-    menu.append(menu_item)
 
-for item in menu:
-    print(item)
-
-print(f"{menu_generator.total_combinations()} возможных комбинаций меню")
-
-print('\nВторая часть')
-
-menu = menu_generator.generate_menu()
-for item in menu:
-    print(item)
-
-print(f"{menu_generator.total_combinations()} возможных комбинаций меню")
+if __name__ == '__main__':
+    main()
