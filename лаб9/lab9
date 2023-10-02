@@ -1,29 +1,33 @@
 from tkinter import *
 from tkinter import messagebox
 
+
 def click():
-    usp = 'Успешно!'
+    a = username_entry.get()
+    usp = f'Добро пожаловать, {a}!'
+    root.destroy()
     messagebox.showinfo('Aворизация', f'{usp}')
-    
+
+
 root = Tk()
 root.title('Авторизация')
 root.geometry('600x400')
 root.resizable(width=False, height=False)
 root['bg'] = 'gainsboro'
 
-main_label = Label(root, text='Авторизация', font='SpasMono 19 bold', bg='gainsboro', fg='black')
+main_label = Label(root, text='Авторизация', font='Arial 19 bold', bg='gainsboro', fg='black')
 main_label.pack()
 
-username_label = Label(root, text='Имя пользователя', font='SpasMono 14', bg='gainsboro', fg='black', padx=10, pady=10)
+username_label = Label(root, text='Имя пользователя', font='Arial 14', bg='gainsboro', fg='black', padx=10, pady=10)
 username_label.pack()
 
-username_entry = Entry(root, bg='white', fg='black', font='SpasMono 12')
+username_entry = Entry(root, bg='white', fg='black', font='Arial 12')
 username_entry.pack()
 
-password_label = Label(root, text='Пароль', font='SpasMono 14', bg='gainsboro', fg='black', padx=10, pady=10)
+password_label = Label(root, text='Пароль', font='Arial 14', bg='gainsboro', fg='black', padx=10, pady=10)
 password_label.pack()
 
-password_entry = Entry(root, bg='white', fg='black', font='SpasMono 12')
+password_entry = Entry(root, bg='white', fg='black', font='Arial 12')
 password_entry.pack()
 
 send_btn = Button(root, text='Войти', command=click)
