@@ -1,30 +1,48 @@
 from tkinter import *
-from tkinter import messagebox
-
 
 def click():
     a = username_entry.get()
     usp = f'Добро пожаловать, {a}!'
+
+    # уничтожение всех виджетов в root
+    for widget in root.winfo_children():
+        widget.destroy()
+
+    # создание нового окна поверх root
+    new_window = Toplevel(root)
+    new_window.title('Приветствие')
+    new_window.geometry('300x100')
+    new_window['bg'] = 'seagreen'
+
+    # обработка события "закрытие окна"
+    new_window.protocol("WM_DELETE_WINDOW", on_closing)
+
+    messagebox_label = Label(new_window, text=usp, font='Arial 14', bg='seagreen', fg='black', padx=50, pady=50)
+    messagebox_label.pack()
+
+    root.withdraw()  # скрытие root окна
+
+
+def on_closing():
     root.destroy()
-    messagebox.showinfo('Aворизация', f'{usp}')
 
 
 root = Tk()
 root.title('Авторизация')
-root.geometry('600x400')
+root.geometry('500x300')
 root.resizable(width=False, height=False)
-root['bg'] = 'gainsboro'
+root['bg'] = 'seagreen'
 
-main_label = Label(root, text='Авторизация', font='Arial 19 bold', bg='gainsboro', fg='black')
+main_label = Label(root, text='Авторизация', font='Arial 19 bold', bg='seagreen', fg='black')
 main_label.pack()
 
-username_label = Label(root, text='Имя пользователя', font='Arial 14', bg='gainsboro', fg='black', padx=10, pady=10)
+username_label = Label(root, text='Имя пользователя', font='Arial 14', bg='seagreen', fg='black', padx=10, pady=10)
 username_label.pack()
 
 username_entry = Entry(root, bg='white', fg='black', font='Arial 12')
 username_entry.pack()
 
-password_label = Label(root, text='Пароль', font='Arial 14', bg='gainsboro', fg='black', padx=10, pady=10)
+password_label = Label(root, text='Пароль', font='Arial 14', bg='seagreen', fg='black', padx=10, pady=10)
 password_label.pack()
 
 password_entry = Entry(root, bg='white', fg='black', font='Arial 12')
