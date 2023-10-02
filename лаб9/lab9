@@ -12,12 +12,12 @@ def click():
     new_window = Toplevel(root)
     new_window.title('Приветствие')
     new_window.geometry('300x100')
-    new_window['bg'] = 'seagreen'
+    new_window['bg'] = 'white'
 
     # обработка события "закрытие окна"
     new_window.protocol("WM_DELETE_WINDOW", on_closing)
 
-    messagebox_label = Label(new_window, text=usp, font='Arial 14', bg='seagreen', fg='black', padx=50, pady=50)
+    messagebox_label = Label(new_window, text=usp, font='Arial 14 bold', bg='white', fg='black', padx=50, pady=50)
     messagebox_label.pack()
 
     root.withdraw()  # скрытие root окна
@@ -27,26 +27,37 @@ def on_closing():
     root.destroy()
 
 
+def toggle_password():
+    if show_password_var.get():
+        password_entry.config(show='')
+    else:
+        password_entry.config(show='*')
+
+
 root = Tk()
 root.title('Авторизация')
-root.geometry('500x300')
+root.geometry('500x330')
 root.resizable(width=False, height=False)
-root['bg'] = 'seagreen'
+root['bg'] = 'white'
 
-main_label = Label(root, text='Авторизация', font='Arial 19 bold', bg='seagreen', fg='black')
+main_label = Label(root, text='Авторизация', font='Arial 19 bold', bg='white', fg='black')
 main_label.pack()
 
-username_label = Label(root, text='Имя пользователя', font='Arial 14', bg='seagreen', fg='black', padx=10, pady=10)
+username_label = Label(root, text='Имя пользователя', font='Arial 14 bold', bg='white', fg='black', padx=10, pady=10)
 username_label.pack()
 
-username_entry = Entry(root, bg='white', fg='black', font='Arial 12')
+username_entry = Entry(root, bg='white', fg='black', font='Arial 12 bold')
 username_entry.pack()
 
-password_label = Label(root, text='Пароль', font='Arial 14', bg='seagreen', fg='black', padx=10, pady=10)
+password_label = Label(root, text='Пароль', font='Arial 14 bold', bg='white', fg='black', padx=10, pady=10)
 password_label.pack()
 
-password_entry = Entry(root, bg='white', fg='black', font='Arial 12')
+password_entry = Entry(root, bg='white', fg='black', font='Arial 12 bold', show='*')
 password_entry.pack()
+
+show_password_var = IntVar()
+show_password_check = Checkbutton(root, text='Показать пароль', variable=show_password_var, command=toggle_password, bg='white', fg='black', font='Arial 12 bold')
+show_password_check.pack()
 
 send_btn = Button(root, text='Войти', command=click)
 send_btn.pack(padx=20, pady=30)
