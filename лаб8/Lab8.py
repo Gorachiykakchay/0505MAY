@@ -48,6 +48,18 @@ def combination():
                 results_text.insert(INSERT, f"{option} ({option_calories} ккал)\n")
         results_text.insert(INSERT, '\n')
 
+
+window = Tk()
+window.title("Задание Лабораторной работы №8")
+window.geometry('500x100')
+lb = Label(window, text='У няни неограниченное количество', font=('Times', 12))
+lb.place(relx=0.5, rely=0.15, anchor=CENTER)
+lbe = Label(window, text='Сформировать (вывести) все возможные варианты меню полдника', font=('Times', 12))
+lbe.place(relx=0.5, rely=0.40, anchor=CENTER)
+lbr = Label(window, text=' (N фруктов) для ребенка на неделю.', font=('Times', 12))
+lbr.place(relx=0.5, rely=0.65, anchor=CENTER)
+window.mainloop()
+
 window = Tk()
 window.title('Лабораторная работа №8')
 window.geometry('1000x750')
