@@ -1,1 +1,67 @@
+import tkinter as tk
+from tkinter import messagebox
+import random
 
+maps = list(range(1, 10))
+victories = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
+
+root = tk.Tk()
+root.title("Крестики-Нолики")
+
+player_turn = True
+
+def check_winner():
+    for i in victories:
+        if str(maps[i[0]]) == 'X' and str(maps[i[1]]) == 'X' and str(maps[i[2]]) == 'X':
+            return 'X'
+        elif str(maps[i[0]]) == 'O' and str(maps[i[1]]) == 'O' and str(maps[i[2]]) == 'O':
+            return 'O'
+    return ''
+
+def reset_game():
+    global player_turn, maps
+    player_turn = True
+    maps = list(range(1, 10))
+    for button in buttons:
+        button['text'] = ""
+        button['state'] = 'normal'
+
+def computer_move():
+    strategies = ['O', 'X'] # first try to block opponent, then try to win
+    for strategy in strategies:
+        for victory in victories:
+            if sum(map(lambda idx: maps[idx] == strategy, victory)) == 2 and sum(map(lambda idx: isinstance(maps[idx], int), victory)) == 1:
+                return victory[[maps[idx] != strategy for idx in victory].index(True)] # return the index of the empty cell in the potential victory line
+    while True: # if there are no strategies, select a random free slot
+        idx = random.choice(range(9))
+        if isinstance(maps[idx], int):
+            return idx
+
+def process_click(i, button):
+    global player_turn
+    symbol = 'X' if player_turn else 'O'
+    maps[i] = symbol
+    button['text'] = symbol
+    button['state'] = 'disabled'
+    winner = check_winner()
+    if winner:
+        messagebox.showinfo("Победа!", f"Победил {winner}!")
+        reset_game()
+        return
+    elif all(isinstance(x, str) for x in maps):
+        messagebox.showinfo("Ничья!", "Игра окончена без победителя!")
+        reset_game()
+        return
+    player_turn = not player_turn
+    if not player_turn: # if it's computer's turn
+        idx = computer_move()
+        process_click(idx, buttons[idx])
+        return
+
+buttons = []
+for i in range(9):
+    button = tk.Button(root, text='', width=10, height=4, command=lambda i=i: process_click(i, buttons[i]))
+    button.grid(row=i//3, column=i%3)
+    buttons.append(button)
+
+root.mainloop()
