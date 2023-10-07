@@ -7,6 +7,8 @@ victories = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [
 
 root = tk.Tk()
 root.title("Крестики-Нолики")
+root.configure(background='black')
+root.resizable(False, False)
 
 player_turn = True
 
@@ -25,14 +27,15 @@ def reset_game():
     for button in buttons:
         button['text'] = ""
         button['state'] = 'normal'
+        button.configure(bg = 'white', activebackground='white')
 
 def computer_move():
-    strategies = ['O', 'X'] # first try to block opponent, then try to win
+    strategies = ['O', 'X']
     for strategy in strategies:
         for victory in victories:
             if sum(map(lambda idx: maps[idx] == strategy, victory)) == 2 and sum(map(lambda idx: isinstance(maps[idx], int), victory)) == 1:
-                return victory[[maps[idx] != strategy for idx in victory].index(True)] # return the index of the empty cell in the potential victory line
-    while True: # if there are no strategies, select a random free slot
+                return victory[[maps[idx] != strategy for idx in victory].index(True)]
+    while True:
         idx = random.choice(range(9))
         if isinstance(maps[idx], int):
             return idx
@@ -42,26 +45,43 @@ def process_click(i, button):
     symbol = 'X' if player_turn else 'O'
     maps[i] = symbol
     button['text'] = symbol
+    if symbol=='X':
+        button.configure(bg = 'orange', activebackground='orange')
+    else:
+        button.configure(bg = 'lightgreen', activebackground='lightgreen')
     button['state'] = 'disabled'
     winner = check_winner()
     if winner:
-        messagebox.showinfo("Победа!", f"Победил {winner}!")
+        if winner == 'O':
+            messagebox.showerror("Победа", "Победил компьютер!")
+        else:
+            messagebox.showinfo("Победа", "Победил игрок!")
         reset_game()
         return
     elif all(isinstance(x, str) for x in maps):
-        messagebox.showinfo("Ничья!", "Игра окончена без победителя!")
+        messagebox.showwarning("Ничья", "Игра окончена без победителя!")
         reset_game()
         return
     player_turn = not player_turn
-    if not player_turn: # if it's computer's turn
+    if not player_turn:
         idx = computer_move()
         process_click(idx, buttons[idx])
         return
 
+# Display whose turn
+turn_text = tk.StringVar()
+turn_label = tk.Label(root, textvariable=turn_text, bg="black", fg="white", font=("Helvetica", 16))
+turn_text.set("Turn of Player")
+turn_label.grid(row=0, column=0, columnspan=3)
+
 buttons = []
 for i in range(9):
-    button = tk.Button(root, text='', width=10, height=4, command=lambda i=i: process_click(i, buttons[i]))
-    button.grid(row=i//3, column=i%3)
+    button = tk.Button(root, text='', width=10, height=4, font=('Helvetica', 20, 'bold'), command=lambda i=i: process_click(i, buttons[i]))
+    button.grid(row=(i//3)+1, column=i%3)
     buttons.append(button)
 
+root.update_idletasks()
+x = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2
+y = (root.winfo_screenheight() - root.winfo_reqheight()) / 2
+root.wm_geometry("+%d+%d" % (x, y))
 root.mainloop()
