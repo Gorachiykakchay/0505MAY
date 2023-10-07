@@ -17,10 +17,10 @@ def click():
     # обработка события "закрытие окна"
     new_window.protocol("WM_DELETE_WINDOW", on_closing)
 
-    messagebox_label = Label(new_window, text=usp, font='Arial 14 bold', bg='white', fg='black', padx=50, pady=50)
+    messagebox_label = Label(new_window, text=usp, font='Arial 14', bg='white', fg='black', padx=50, pady=50)
     messagebox_label.pack()
 
-    root.withdraw()  # скрытие root окна
+    root.withdraw()
 
 
 def on_closing():
@@ -40,23 +40,23 @@ root.geometry('500x330')
 root.resizable(width=False, height=False)
 root['bg'] = 'white'
 
-main_label = Label(root, text='Авторизация', font='Arial 19 bold', bg='white', fg='black')
+main_label = Label(root, text='Авторизация', font='Arial 16', bg='white', fg='black')
 main_label.pack()
 
-username_label = Label(root, text='Имя пользователя', font='Arial 14 bold', bg='white', fg='black', padx=10, pady=10)
+username_label = Label(root, text='Имя пользователя', font='Arial 12', bg='white', fg='black', padx=10, pady=10)
 username_label.pack()
 
-username_entry = Entry(root, bg='white', fg='black', font='Arial 12 bold')
+username_entry = Entry(root, bg='white', fg='black', font='Arial 12')
 username_entry.pack()
 
-password_label = Label(root, text='Пароль', font='Arial 14 bold', bg='white', fg='black', padx=10, pady=10)
+password_label = Label(root, text='Пароль', font='Arial 12', bg='white', fg='black', padx=10, pady=10)
 password_label.pack()
 
-password_entry = Entry(root, bg='white', fg='black', font='Arial 12 bold', show='*')
+password_entry = Entry(root, bg='white', fg='black', font='Arial 12', show='*')
 password_entry.pack()
 
 show_password_var = IntVar()
-show_password_check = Checkbutton(root, text='Показать пароль', variable=show_password_var, command=toggle_password, bg='white', fg='black', font='Arial 12 bold')
+show_password_check = Checkbutton(root, text='Показать пароль', variable=show_password_var, command=toggle_password, bg='white', fg='black', font='Arial 9')
 show_password_check.pack()
 
 send_btn = Button(root, text='Войти', command=click)
