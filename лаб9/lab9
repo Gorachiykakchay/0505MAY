@@ -1,7 +1,15 @@
 from tkinter import *
+from tkinter import messagebox
+
 
 def click():
     a = username_entry.get()
+    b = password_entry.get()
+
+    if a.strip() == '' or b.strip() == '':
+        messagebox.showerror("Ошибка", "Оба поля ввода должны быть заполнены!")
+        return
+
     usp = f'Добро пожаловать, {a}!'
 
     # уничтожение всех виджетов в root
@@ -56,7 +64,8 @@ password_entry = Entry(root, bg='white', fg='black', font='Arial 12', show='*')
 password_entry.pack()
 
 show_password_var = IntVar()
-show_password_check = Checkbutton(root, text='Показать пароль', variable=show_password_var, command=toggle_password, bg='white', fg='black', font='Arial 9')
+show_password_check = Checkbutton(root, text='Показать пароль', variable=show_password_var, command=toggle_password,
+                                  bg='white', fg='black', font='Arial 9')
 show_password_check.pack()
 
 send_btn = Button(root, text='Войти', command=click)
