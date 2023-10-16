@@ -68,12 +68,6 @@ def process_click(i, button):
         process_click(idx, buttons[idx])
         return
 
-# Display whose turn
-turn_text = tk.StringVar()
-turn_label = tk.Label(root, textvariable=turn_text, bg="black", fg="white", font=("Helvetica", 16))
-turn_text.set("Turn of Player")
-turn_label.grid(row=0, column=0, columnspan=3)
-
 buttons = []
 for i in range(9):
     button = tk.Button(root, text='', width=10, height=4, font=('Helvetica', 20, 'bold'), command=lambda i=i: process_click(i, buttons[i]))
