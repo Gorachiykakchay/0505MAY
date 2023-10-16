@@ -45,11 +45,12 @@ class MenuAnalyzer:
             print(f"\nСамый калорийный фрукт на день {day + 1}: {max_calories_fruit[0]} ({max_calories_fruit[1]} ккал)")
 
 if __name__ == '__main__':
-    print('Введите количество разных фруктов K: ', end='')
-    k = int(input())
-    if k <= 0:
-        print('Фрукты закончились')
-        quit()
+    while True:
+        k = int(input('Введите количество разных фруктов K: '))
+        if k <= 0:
+            print('Введите количество фруктов больше 0!')
+        else:
+            break
 
     while True:
         n = int(input('Введите количество фруктов в одном полднике N: '))
