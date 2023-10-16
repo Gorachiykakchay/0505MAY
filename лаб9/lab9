@@ -1,8 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
+import os
 
-
-def click():
+def sign_up():
     a = username_entry.get()
     b = password_entry.get()
 
@@ -10,29 +10,39 @@ def click():
         messagebox.showerror("Ошибка", "Оба поля ввода должны быть заполнены!")
         return
 
-    usp = f'Добро пожаловать, {a}!'
+    with open(f'{a}.txt', 'w') as file:
+        file.write(b)
+    
 
-    # уничтожение всех виджетов в root
-    for widget in root.winfo_children():
-        widget.destroy()
-
-    # создание нового окна поверх root
-    new_window = Toplevel(root)
-    new_window.title('Приветствие')
-    new_window.geometry('300x100')
-    new_window['bg'] = 'white'
-
-    # обработка события "закрытие окна"
-    new_window.protocol("WM_DELETE_WINDOW", on_closing)
-
-    messagebox_label = Label(new_window, text=usp, font='Arial 14', bg='white', fg='black', padx=50, pady=50)
-    messagebox_label.pack()
-
-    root.withdraw()
+    messagebox.showinfo("Успешно", "Регистрация прошла успешно!")
+    username_entry.delete(0, END)
+    password_entry.delete(0, END)
 
 
-def on_closing():
-    root.destroy()
+def sign_in():
+    a = username_entry.get()
+    b = password_entry.get()
+
+    if a.strip() == '' or b.strip() == '':
+        messagebox.showerror("Ошибка", "Оба поля ввода должны быть заполнены!")
+        return
+
+    if not os.path.exists(f'{a}.txt'):
+        messagebox.showerror("Ошибка", "Пользователь не существует!")
+        return
+
+    with open(f'{a}.txt', 'r') as file:
+        if b != file.read():
+            messagebox.showerror("Ошибка", "Неправильный пароль!")
+            return
+
+    welcome_window = Toplevel(root)
+    welcome_window.geometry('300x100')
+    welcome_label = Label(welcome_window, text=f'ДОБРО ПОЖАЛОВАТЬ, {a}!', font='Arial 16')
+    welcome_label.pack(expand=True)
+    username_entry.delete(0, END)
+    password_entry.delete(0, END)
+
 
 
 def toggle_password():
@@ -64,11 +74,19 @@ password_entry = Entry(root, bg='white', fg='black', font='Arial 12', show='*')
 password_entry.pack()
 
 show_password_var = IntVar()
-show_password_check = Checkbutton(root, text='Показать пароль', variable=show_password_var, command=toggle_password,
-                                  bg='white', fg='black', font='Arial 9')
+show_password_check = Checkbutton(root, text='Показать пароль', variable=show_password_var, command=toggle_password, bg='white', fg='black', font='Arial 9')
 show_password_check.pack()
 
-send_btn = Button(root, text='Войти', command=click)
-send_btn.pack(padx=20, pady=30)
+sign_up_btn = Button(root, text='Регистрация', command=sign_up)
+sign_up_btn.pack(padx=20, pady=10)
+
+sign_in_btn = Button(root, text='Войти', command=sign_in)
+sign_in_btn.pack(padx=20, pady=10)
+
+root.update_idletasks()
+x = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2.5
+y = (root.winfo_screenheight() - root.winfo_reqheight()) / 2.5
+root.wm_geometry("+%d+%d" % (x, y))
+
 
 root.mainloop()
