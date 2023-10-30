@@ -10,9 +10,12 @@ def sign_up():
         messagebox.showerror("Ошибка", "Оба поля ввода должны быть заполнены!")
         return
 
+    if os.path.exists(f'{a}.txt'):
+        messagebox.showerror("Ошибка", "Пользователь уже существует!")
+        return
+
     with open(f'{a}.txt', 'w') as file:
         file.write(b)
-    
 
     messagebox.showinfo("Успешно", "Регистрация прошла успешно!")
     username_entry.delete(0, END)
@@ -26,7 +29,6 @@ def sign_in():
     if a.strip() == '' or b.strip() == '':
         messagebox.showerror("Ошибка", "Оба поля ввода должны быть заполнены!")
         return
-
     if not os.path.exists(f'{a}.txt'):
         messagebox.showerror("Ошибка", "Пользователь не существует!")
         return
@@ -37,13 +39,19 @@ def sign_in():
             return
 
     welcome_window = Toplevel(root)
-    welcome_window.geometry('300x100')
+    welcome_window.title('Добро пожаловать')
+
+    # Centering the welcome window on the screen
+    welcome_window_width = 300
+    welcome_window_height = 100
+    welcome_window_x = (welcome_window.winfo_screenwidth() - welcome_window_width) // 2
+    welcome_window_y = (welcome_window.winfo_screenheight() - welcome_window_height) // 2
+    welcome_window.geometry(f'{welcome_window_width}x{welcome_window_height}+{welcome_window_x}+{welcome_window_y}')
+
     welcome_label = Label(welcome_window, text=f'ДОБРО ПОЖАЛОВАТЬ, {a}!', font='Arial 16')
-    welcome_label.pack(expand=True)
+    welcome_label.place(relx=0.5, rely=0.5, anchor=CENTER)
     username_entry.delete(0, END)
     password_entry.delete(0, END)
-
-
 
 def toggle_password():
     if show_password_var.get():
@@ -57,36 +65,26 @@ root.title('Авторизация')
 root.geometry('500x330')
 root.resizable(width=False, height=False)
 root['bg'] = 'white'
-
 main_label = Label(root, text='Авторизация', font='Arial 16', bg='white', fg='black')
 main_label.pack()
-
 username_label = Label(root, text='Имя пользователя', font='Arial 12', bg='white', fg='black', padx=10, pady=10)
 username_label.pack()
-
 username_entry = Entry(root, bg='white', fg='black', font='Arial 12')
 username_entry.pack()
-
 password_label = Label(root, text='Пароль', font='Arial 12', bg='white', fg='black', padx=10, pady=10)
 password_label.pack()
-
 password_entry = Entry(root, bg='white', fg='black', font='Arial 12', show='*')
 password_entry.pack()
-
 show_password_var = IntVar()
 show_password_check = Checkbutton(root, text='Показать пароль', variable=show_password_var, command=toggle_password, bg='white', fg='black', font='Arial 9')
 show_password_check.pack()
-
 sign_up_btn = Button(root, text='Регистрация', command=sign_up)
 sign_up_btn.pack(padx=20, pady=10)
 
 sign_in_btn = Button(root, text='Войти', command=sign_in)
 sign_in_btn.pack(padx=20, pady=10)
-
 root.update_idletasks()
 x = (root.winfo_screenwidth() - root.winfo_reqwidth()) / 2.5
 y = (root.winfo_screenheight() - root.winfo_reqheight()) / 2.5
 root.wm_geometry("+%d+%d" % (x, y))
-
-
 root.mainloop()
