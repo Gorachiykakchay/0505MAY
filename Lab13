@@ -1,0 +1,50 @@
+'''
+TODO: Обработка CSV файлов
+1.Прочитать в виде списков набор данных titanic.csv, взятый из открытых источников:
+https://tproger.ru/translations/the-best-datasets-for-machine-learning-and-data-science/
+https://vc.ru/ml/150241-15-proektov-dlya-razvitiya-navykov-raboty-s-mashinnym-obucheniem
+https://archive.ics.uci.edu/ml/index.php
+https://habr.com/ru/company/edison/blog/480408/
+https://www.kaggle.com/datasets/
+2.Для прочитанного набора выполнить обработку в соответствии со своим вариантом. Библиотекой pandas пользоваться нельзя.
+
+Вариант - 25. Определить количество женщин на борту минимального и максимального возраста и сколько из них выжило
+'''
+import csv
+
+def count_female_survivors(file_path):
+    max_age = 0
+    min_age = float('inf')
+    count_max_age = 0
+    count_min_age = 0
+    count_female = 0
+    count_survived = 0
+
+    with open(file_path, 'r', encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+
+        for row in reader:
+            if row['Sex'] == 'female':
+                count_female += 1
+                if row['Age']:
+                    age = float(row['Age'])
+                    if age > max_age:
+                        max_age = age
+                        count_max_age = 1
+                    elif age == max_age:
+                        count_max_age += 1
+                    if age < min_age:
+                        min_age = age
+                        count_min_age = 1
+                    elif age == min_age:
+                        count_min_age += 1
+                    if int(row['Survived']) == 1:
+                        count_survived += 1
+
+    print("Количество женщин на борту:", count_female)
+    print("Количество выживших женщин:", count_survived)
+    print("Максимальный возраст среди женщин:", max_age, "Количество:", count_max_age)
+    print("Минимальный возраст среди женщин:", min_age, "Количество:", count_min_age)
+
+file_path = 'titanic.csv'
+count_female_survivors(file_path)
