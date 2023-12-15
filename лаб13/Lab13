@@ -33,22 +33,22 @@ def count_female_survivors(file_path):
                     if age > max_age:
                         max_age = age
                         count_max_age = 1
-                        if row['Survived'] == '0':  # Исправление: сравнение со строкой '0'
+                        if row['Survived'] == '0':  
                             survived_max += 1
                     elif age == max_age:
                         count_max_age += 1
-                        if row['Survived'] == '0':  # Исправление: сравнение со строкой '0'
+                        if row['Survived'] == '0':  
                             survived_max += 1
                     if age < min_age:
                         min_age = age
                         count_min_age = 1
-                        if row['Survived'] == '0':  # Исправление: сравнение со строкой '0'
+                        if row['Survived'] == '0': 
                             survived_min += 1
                     elif age == min_age:
                         count_min_age += 1
-                        if row['Survived'] == '0':  # Исправление: сравнение со строкой '0'
+                        if row['Survived'] == '0':  
                             survived_min += 1
-                    if row['Survived'] == '1':  # Исправление: сравнение со строкой '1'
+                    if row['Survived'] == '1':
                         count_survived += 1
 
     print("Количество женщин на борту:", count_female)
