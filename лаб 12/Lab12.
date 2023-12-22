@@ -16,15 +16,15 @@ def s_sum(x, t):
 
     while True:
         det_curr_x = np.linalg.det(curr_x)  # Вычисление определителя матрицы curr_x
-        curr_term = det_curr_x * sign / (2 * n - 1)  # Вычисление текущего слагаемого
-        res += np.abs(curr_term)  # Добавление абсолютного значения слагаемого к результату
+        curr_term = sign * det_curr_x / (2 * n - 1)  # Вычисление текущего слагаемого
+        res += curr_term  # Добавление значения слагаемого к результату
 
         if np.abs(curr_term) < 1 / (10 ** t):  # Проверка точности вычислений
             break
 
         n += 1  # Увеличение номера слагаемого
         sign = -sign  # Смена знака слагаемого
-        curr_x = np.multiply(curr_x, x)  # Поэлементное умножение матриц curr_x и x
+        curr_x = np.dot(curr_x, x)  # Матричное умножение curr_x и x для получения следующей степени
 
     return res
 
@@ -49,4 +49,3 @@ try:
 
 except ValueError:
     print("\nОшибка: Введенный символ не является числом. Повторите ввод.")
-
