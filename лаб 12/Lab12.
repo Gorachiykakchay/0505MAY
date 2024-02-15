@@ -6,46 +6,38 @@
 '''
 
 
+import random as ran
 import numpy as np
+import decimal as de
 
-def s_sum(x, t):
-    n = 1  # Номер слагаемого
-    curr_x = np.copy(x)  # Копия матрицы x
-    res = 0  # Результат суммы
-    sign = 1  # Знак слагаемого
+# Создание матрицы
+k = ran.randint(2, 10)
+x = np.random.uniform(-1, 1, (k, k))
 
-    while True:
-        det_curr_x = np.linalg.det(curr_x)  # Вычисление определителя матрицы curr_x
-        curr_term = sign * det_curr_x / (2 * n - 1)  # Вычисление текущего слагаемого
-        res += curr_term  # Добавление значения слагаемого к результату
+# Ввод t
+t = input("Введите число t от 1 до 100: ")
 
-        if np.abs(curr_term) < 1 / (10 ** t):  # Проверка точности вычислений
-            break
+# Проверка t на правильность ввода
+while True:
+    if t.isdigit() and 1 <= int(t) <= 100:
+        t = int(t)
+        break
+    else:
+        t = input("Некорректный ввод t. Введите число t от 1 до 100: ")
 
-        n += 1  # Увеличение номера слагаемого
-        sign = -sign  # Смена знака слагаемого
-        curr_x = np.dot(curr_x, x)  # Матричное умножение curr_x и x для получения следующей степени
+n = 1  # номер слагаемого
+factorial = 1  # факториал
+sign = 1  # знак
+result = de.Decimal(0)  # результат
+matrix = x  # матрица
+de.getcontext().prec = t + 60  # установка точности
 
-    return res
+while abs(result.as_tuple().exponent) < t:
+    term = de.Decimal(np.prod(matrix) * factorial / (2 * n - 1))  # вычисление слагаемого
+    result += sign * term  # прибавление результата с учетом знака
+    n += 1  # следующий номер слагаемого
+    factorial *= (2 * n - 1)  # новый факториал с учетом нового номера слагаемого
+    sign = -sign  # изменение знака
 
-try:
-    t = int(input("Введите число t, являющееся количеством знаков после запятой (точностью):\n"))
-    while t > 300 or t < 1:  # Проверка корректности введенного значения t
-        t = int(input("Вы ввели недопустимое значение t. Введите число t, большее или равное 1:\n"))
-
-    k = np.random.randint(1, 11)  # Генерация случайного целого числа k
-    x = np.random.uniform(-1, 1, (k, k))  # Генерация случайной матрицы x
-
-    while np.linalg.matrix_rank(x) != k:  # Проверка ранга матрицы x
-        x = np.random.uniform(-1, 1, (k, k))  # Повторная генерация случайной матрицы x
-
-    print("Сгенерированная матрица:")
-    print(x)
-    print()
-
-    result = s_sum(x, t)  # Вычисление суммы знакопеременного ряда
-
-    print(f"Сумма ряда с точностью {t} знаков после запятой: {result:.{t}f}".rstrip('0').rstrip('.'))
-
-except ValueError:
-    print("\nОшибка: Введенный символ не является числом. Повторите ввод.")
+print(x)  # вывод матрицы
+print(f"Результат: {result:.{t}f}")  # вывод результата
