@@ -1,0 +1,46 @@
+import re
+
+# Чтение объектов из файла и вывод на экран
+def read_and_print_objects(filename):
+    with open(filename, 'r') as file:
+        data = file.read().split()
+        for obj in data:
+            print(obj, end=' ')
+        print()
+
+# Обработка и вывод результата
+def process_objects(filename):
+    max_hex_numbers = []
+    max_value = None
+    max_count = 0
+
+    with open(filename, 'r') as file:
+        data = file.read()
+        hex_numbers = re.findall(r'\b0x[0-9a-fA-F]*0|0x0\b', data)
+
+        for hex_num in hex_numbers:
+            value = int(hex_num, 16)
+            if max_value is None or value > max_value:
+                max_value = value
+                max_hex_numbers = [hex_num]
+                max_count = 1
+            elif value == max_value:
+                max_hex_numbers.append(hex_num)
+                max_count += 1
+
+    if max_value is not None:
+        print(f'Максимальное число: {max_value}')
+        print(f'Количество максимальных чисел: {max_count}')
+        print('Максимальные числа в шестнадцатеричном формате:', end=' ')
+        for num in max_hex_numbers:
+            print(num, end=' ')
+    else:
+        print('Нет подходящих шестнадцатеричных чисел')
+
+# Пример использования
+filename = 'input.txt'  # имя файла с объектами
+read_and_print_objects(filename)
+process_objects(filename)
+
+file_path = 'titanic.csv'
+count_female_survivors(file_path)
